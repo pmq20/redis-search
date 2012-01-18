@@ -2,7 +2,6 @@ source :rubygems
 gemspec
 gem "rake"
 group :test do
-  gem 'pry'
   gem 'activesupport'
   gem 'redis'
   gem "redis-namespace"
