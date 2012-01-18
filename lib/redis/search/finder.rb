@@ -182,6 +182,17 @@ class Redis
   
     private
       def self._split(text)
+        #for safety, note that RMMSeg::Algorithm.new(nil) causes Segmentation fault
+        if nil==text
+          msg = 'Refrained from calling RMMSeg::Algorithm with nil'
+          if defined?(Rails) == 'constant' && Rails.class == Class
+            ::Rails.logger.warn(msg)
+          else
+            puts msg
+          end
+          return []
+        end
+        #now it's safe.
         algor = RMMSeg::Algorithm.new(text)
         words = []
         loop do
