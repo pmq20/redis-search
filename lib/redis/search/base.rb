@@ -25,7 +25,7 @@ class Redis
         Search.indexed_models = [] if Search.indexed_models == nil
         Search.indexed_models << self
         # bind instance methods and callback events
-        class_eval %(
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
           def redis_search_fields_to_hash(ext_fields)
             exts = {}
             ext_fields.each do |f|
@@ -96,7 +96,7 @@ class Redis
             end
             true
           end
-        )
+        RUBY
       end
     end
   end
