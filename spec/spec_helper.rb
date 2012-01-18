@@ -1,3 +1,4 @@
+
 require 'rubygems'
 
 
@@ -7,12 +8,22 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'active_support/all'
-require "redis"
+if File.exists?(ENV['BUNDLE_GEMFILE'])
+  Bundler.require(:test)
+else
+  require "redis"
+  require "redis-namespace"
+  require "mongoid"
+  require "mocha"
+end
 require "redis-search"
-require "redis-namespace"
-require "mongoid"
-require "mocha"
 require "uri"
+
+# Fixed by P.S.V.R, in order not to raise
+#   `gsub': invalid byte sequence in US-ASCII
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 
 mongoid_config = YAML.load_file(File.join(File.dirname(__FILE__),"mongoid.yml"))['test']
 Mongoid.configure do |config|
@@ -40,7 +51,7 @@ Redis::Search.configure do |config|
   config.pinyin_match = true
 end
 
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.mock_with :mocha
   config.after :suite do
     Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
