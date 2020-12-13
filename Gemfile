@@ -6,7 +6,7 @@ group :test do
   gem 'redis'
   gem "redis-namespace"
   gem "rmmseg-cpp-huacnlee"
-  gem "mongoid", "~> 2.4"
+  gem "mongoid", "~> 3.0", ">= 3.0.0"
   gem "bson_ext", "~> 1.5"
   gem 'rspec'
   gem 'mocha'
